@@ -29,11 +29,9 @@
   </div>
 </template>
 
-
-
 <script>
 import axios from 'axios';
-import Search from './Search.vue';;
+import Search from './Search.vue';
 
 const API_KEY = 'a5549d08';
 
@@ -58,7 +56,6 @@ export default {
   computed: {
 
     totalPages() {
-      // calculate the total number of pages based on the number of items to show per page and the total items we got from server
       return this.allMovies.length && (this.allMovies.length > this.perPage) ? Math.ceil(this.allMovies.length / this.perPage) : 1;
     },
 
@@ -67,8 +64,6 @@ export default {
     },
 
     stop() {
-      // stop at the end of the array if array length OR the items left are less than the number of items to show per page
-      // do the calculation if otherwise
       if ((this.allMovies.length - this.start) >= this.perPage) {
         return (this.pageToOpen * this.perPage) - 1;
       }
@@ -90,28 +85,21 @@ export default {
       return `The movie titled: ${movie.Title}`;
     },
     singleMovie(id) {
-     this.$router.push(`/movie/${id}`);
+      this.$router.push(`/movie/${id}`);
     },
     renderList(pageNumber = 1) {
-      // clear currently displayed list
       this.moviesToDisplay = [];
-
-      // set countries to display
       if (this.allMovies.length) {
         const _this = this;
 
         return new Promise(((res, rej) => {
-          // set the page to open to the pageNumber in the parameter in order to allow start and stop to update accordingly
           _this.pageToOpen = pageNumber;
-
-          // add the necessary data to `countriesToDisplay` array
           for (let i = _this.start; i <= _this.stop; i++) {
             _this.moviesToDisplay.push(_this.allMovies[i]);
           }
 
           res();
         })).then(() => {
-          // Now update the current page to the page we just loaded
           _this.currentPage = _this.pageToOpen;
         }).catch(() => {
           console.log('render err');
@@ -119,7 +107,6 @@ export default {
       }
     },
     fetchMovies() {
-
       const MOVIE_API_URL = `https://www.omdbapi.com/?s=${this.search}&apikey=${API_KEY}`;
       axios
         .get(MOVIE_API_URL)
@@ -133,7 +120,6 @@ export default {
         });
     },
     handleSearch(searchTerm) {
-      console.log('searchTerm', searchTerm);
       this.loading = true;
       this.search = searchTerm;
       this.fetchMovies();
@@ -153,9 +139,4 @@ export default {
   .m-t-30{
     margin-top: 30px;
   }
-  .page-header{
-    font-size: -webkit-xxx-large;
-    font-weight: bold;
-  }
 </style>
-
